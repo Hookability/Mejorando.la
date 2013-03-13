@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     # podcast de mejorandola
     url(r'^podcast/?$', 'website.views.podcast'),
 
+    url(r'^conferencia/?$', 'website.views.conferencia'),
+
     url(r'^(?P<path>conferencias)/?$', 'website.views.all'),
 
     url(r'^(?P<path>colombia)/?$', 'website.views.all'),

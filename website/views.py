@@ -165,3 +165,7 @@ def all(req, path):
         return render_to_response('%s.html' % path)
     except TemplateDoesNotExist:
         raise Http404
+
+
+def conferencia(req):
+    return render_to_response('conferencia-argentina.html')
