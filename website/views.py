@@ -127,6 +127,33 @@ def locateme(solicitud):
     return HttpResponse(get_pais(solicitud.META))
 
 
+def register(solicitud):
+    if solicitud.method == 'POST' and solicitud.POST.get('email') and solicitud.POST.get('nombre'):
+        pais = get_pais(solicitud.META)
+        email = solicitud.POST['email']
+        nombre = solicitud.POST['nombre']
+
+        payload = {
+            'email_address': email,
+            'apikey': settings.MAILCHIMP_APIKEY,
+            'merge_vars': {
+                'FNAME': nombre,
+                'OPTINIP': get_ip(solicitud.META),
+                'OPTIN_TIME': time.time(),
+                'PAIS': pais,
+                'GROUPINGS': (dict(name='Argentina', groups='1303.Conferencia'), )
+            },
+            'id': settings.MAILCHIMP_LISTID,
+            'email_type': 'html'
+        }
+
+        r = requests.post('http://us4.api.mailchimp.com/1.3/?method=listSubscribe', simplejson.dumps(payload))
+
+        return HttpResponse(r.text)
+
+    return render_to_response('./hola.html')
+
+
 def hola(solicitud):
 
     if solicitud.method == 'POST' and solicitud.POST.get('email') and solicitud.POST.get('nombre'):
